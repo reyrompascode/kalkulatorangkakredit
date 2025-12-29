@@ -116,6 +116,29 @@
 
     .total-row { background: #f8fafc; font-weight: bold; }
     .badge { background: var(--success); color: white; padding: 6px 12px; border-radius: 8px; }
+      /* FOOTER STYLING */
+    footer {
+  width: 100%;
+  max-width: 850px;
+  text-align: center;
+  padding: 0 0 20px 0; /* Padding atas dibuat 0 */
+  margin-top: 0;
+  color: #94a3b8; /* Tadi Anda pakai #f8f8f8, itu warna putih (hampir tidak terlihat) */
+}
+
+.footer-logo {
+  max-width: 120px;
+  height: auto;
+  display: block;
+  margin: -30px auto 10px auto; /* Menaikkan 50px ke atas dan posisi tengah */
+  position: relative; /* Menambah kekuatan posisi */
+  z-index: 10; /* Memastikan logo berada di depan elemen lain */
+}
+footer p {
+  margin-top: -30px; /* Semakin besar angka minusnya, semakin tinggi teks naik */
+  color: #94a3b8;    /* Warna abu-abu profesional */
+  font-size: 0.85rem;
+}
   </style>
 </head>
 <body>
@@ -166,7 +189,10 @@
   <button onclick="prosesHitung()">Hitung</button>
 
   <div id="hasil" class="table-wrapper"></div>
-</div>
+</div>  <footer>
+  <img src="logo-bps.png" alt="Logo BPS" class="footer-logo">
+  <p>© 2024 BPS Kota Jakarta Barat</p>
+</footer>
 
 <script>
 const KOEF = {Pemula:3.75, Terampil:5, Mahir:12.5, Penyelia:25, 'Ahli pertama':12.5, 'Ahli muda':25, 'Ahli Madya':37.5, 'Ahli Utama':50};
@@ -262,5 +288,6 @@ function prosesHitung() {
 </script>
 </body>
 </html>
+
 
 
