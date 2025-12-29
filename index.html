@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PAK-Man (Penghitung Angka Kredit - Mandiri)</title>
+  <title>PAK-Man (Penghitung Angka Kredit Mandiri)</title>
   <style>
     :root {
       --bps-blue: #005baa;
       --bps-dark: #003f77;
       --bps-light: #f1f7fe;
       --success: #10b981;
+      --danger: #ef4444;
     }
     body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
       background-color: #f4f7fa;
       margin: 0;
       display: flex;
@@ -30,6 +31,8 @@
     .header-area {
       text-align: center;
       margin-bottom: 30px;
+      border-bottom: 2px solid var(--bps-light);
+      padding-bottom: 20px;
     }
     .header-area h2 { color: var(--bps-blue); margin: 0; }
     
@@ -37,21 +40,19 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
 
     .field { display: flex; flex-direction: column; gap: 8px; }
-    label { font-size: 0.85rem; font-weight: 700; color: #64748b; }
+    label { font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase; }
 
-    /* Modern Single Month-Year Input */
     input[type="month"], input[type="number"], select {
-      padding: 14px;
+      padding: 12px;
       border: 2px solid #e2e8f0;
-      border-radius: 12px;
+      border-radius: 10px;
       font-size: 1rem;
       outline: none;
       transition: all 0.3s;
-      background: #fff;
     }
     input:focus, select:focus {
       border-color: var(--bps-blue);
@@ -62,7 +63,8 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
       gap: 15px;
-      margin-top: 10px;
+      margin: 15px 0 25px 0;
+      min-height: 50px;
     }
     .skp-item {
       background: var(--bps-light);
@@ -71,7 +73,6 @@
       border: 1px solid #e0e7ff;
     }
     .skp-item span { display: block; margin-bottom: 8px; font-weight: bold; color: var(--bps-blue); font-size: 0.8rem; }
-    .skp-item select { padding: 8px; width: 100%; border-radius: 8px; border: 1px solid #cbd5e1; }
 
     button {
       width: 100%;
@@ -80,68 +81,91 @@
       border: none;
       padding: 16px;
       border-radius: 12px;
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 25px;
-      transition: transform 0.2s;
+      transition: background 0.2s;
     }
-    button:active { transform: scale(0.98); }
+    button:hover { background: var(--bps-dark); }
 
-    table { width: 100%; border-collapse: collapse; margin-top: 25px; }
-    th { padding: 12px; text-align: center; color: #64748b; font-size: 0.75rem; text-transform: uppercase; border-bottom: 2px solid #e2e8f0; }
-    td { padding: 12px; border-bottom: 1px solid #f1f5f9; text-align: center; font-family: 'Courier New', monospace; }
-    td:first-child { text-align: center; font-family: inherit; font-weight: 600; color: var(--bps-blue); }
+    /* Styling Tabel Rincian */
+    .table-wrapper { overflow-x: auto; margin-top: 30px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { 
+      padding: 12px; 
+      background: #f8fafc;
+      color: #64748b; 
+      font-size: 0.75rem; 
+      text-transform: uppercase; 
+      border-bottom: 2px solid #e2e8f0;
+      text-align: center; 
+    }
+    td { 
+      padding: 12px; 
+      border-bottom: 1px solid #f1f5f9; 
+      text-align: center; /* SEMUA KOLOM RATA TENGAH */
+      font-family: 'Courier New', monospace; 
+      font-size: 0.95rem;
+    }
+    /* Kolom Bulan tetap tebal tapi rata tengah */
+    td:first-child { 
+      font-family: inherit; 
+      font-weight: 600; 
+      color: var(--bps-blue); 
+    }
 
     .total-row { background: #f8fafc; font-weight: bold; }
-    .status-pill { background: var(--success); color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.9rem; }
+    .badge { background: var(--success); color: white; padding: 6px 12px; border-radius: 8px; }
   </style>
 </head>
 <body>
 
 <div class="card">
   <div class="header-area">
-    <h2>PAK-Man (Penghitung Angka Kredit - Mandiri)</h2>
-    <p style="color:#94a3b8; font-size: 0.9rem;">BPS Kota Jakarta Barat</p>
+    <h2>PAK-Man (Penghitung Angka Kredit Mandiri)</h2>
+    <p style="color:#94a3b8; font-size: 0.9rem;">Internal Badan Pusat Statistik</p>
   </div>
 
   <div class="input-grid">
     <div class="field">
       <label>Jabatan Saat Ini</label>
       <select id="jabatan">
-        <option value="Pemula">Pemula (Keterampilan)</option>
-        <option value="Terampil">Terampil (Keterampilan)</option>
-        <option value="Mahir">Mahir (Keterampilan)</option>
-        <option value="Penyelia">Penyelia (Keterampilan)</option>
-        <option value="Ahli pertama">Ahli Pertama (Keahlian)</option>
-        <option value="Ahli muda">Ahli Muda (Keahlian)</option>
-        <option value="Ahli Madya">Ahli Madya (Keahlian)</option>
-        <option value="Ahli Utama">Ahli Utama (Keahlian)</option>
+        <option value="">-- Pilih Jabatan --</option>
+        <option value="Pemula">Pemula</option>
+        <option value="Terampil">Terampil</option>
+        <option value="Mahir">Mahir</option>
+        <option value="Penyelia">Penyelia</option>
+        <option value="Ahli pertama">Ahli Pertama</option>
+        <option value="Ahli muda">Ahli Muda</option>
+        <option value="Ahli Madya">Ahli Madya</option>
+        <option value="Ahli Utama">Ahli Utama</option>
       </select>
     </div>
     <div class="field">
-      <label>PAK Terakhir</label>
-      <input type="number" id="pak" step="0.001" placeholder="0.000">
+      <label>Nilai PAK Terakhir</label>
+      <input type="number" id="pak" step="0.001" placeholder="Masukkan angka...">
     </div>
   </div>
 
   <div class="input-grid" style="grid-template-columns: 2fr 1fr;">
     <div class="field">
       <label>Periode Mulai Hitung (Bulan - Tahun)</label>
-      <input type="month" id="periodeMulai" value="2024-01">
+      <input type="month" id="periodeMulai">
     </div>
     <div class="field">
-      <label>Durasi (Tahun)</label>
+      <label>Durasi Simulasi (Tahun)</label>
       <input type="number" id="durasi" value="3" min="1" max="5">
     </div>
   </div>
 
   <label>Target Predikat Kinerja (SKP)</label>
-  <div id="skpList" class="skp-container"></div>
+  <div id="skpList" class="skp-container">
+    <p style="color:#94a3b8; font-size:0.85rem;">Pilih periode terlebih dahulu...</p>
+  </div>
 
-  <button onclick="prosesHitung()">Hitung Akumulasi</button>
+  <button onclick="prosesHitung()">Hitung</button>
 
-  <div id="hasil"></div>
+  <div id="hasil" class="table-wrapper"></div>
 </div>
 
 <script>
@@ -151,10 +175,13 @@ const BULAN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov'
 
 function generateSKPFields() {
   const container = document.getElementById('skpList');
-  const periode = document.getElementById('periodeMulai').value; // Format: "YYYY-MM"
+  const periode = document.getElementById('periodeMulai').value;
   const durasi = parseInt(document.getElementById('durasi').value) || 1;
   
-  if(!periode) return;
+  if(!periode) {
+    container.innerHTML = '<p style="color:#94a3b8; font-size:0.85rem;">Pilih periode terlebih dahulu...</p>';
+    return;
+  }
   
   const startYear = parseInt(periode.split('-')[0]);
   container.innerHTML = '';
@@ -163,7 +190,7 @@ function generateSKPFields() {
     const y = startYear + i;
     container.innerHTML += `
       <div class="skp-item">
-        <span>SKP TAHUN ${y}</span>
+        <span>TAHUN ${y}</span>
         <select class="skp-val" data-year="${y}">
           <option value="Sangat Baik">Sangat Baik</option>
           <option value="Baik" selected>Baik</option>
@@ -174,17 +201,23 @@ function generateSKPFields() {
   }
 }
 
-// Re-generate saat input berubah
 document.getElementById('periodeMulai').addEventListener('change', generateSKPFields);
 document.getElementById('durasi').addEventListener('input', generateSKPFields);
-window.onload = generateSKPFields;
 
 function prosesHitung() {
   const jab = document.getElementById('jabatan').value;
-  const pakAwal = parseFloat(document.getElementById('pak').value) || 0;
+  const pakRaw = document.getElementById('pak').value;
   const periode = document.getElementById('periodeMulai').value;
+  
+  // VALIDASI INPUT KOSONG
+  if (!jab || !pakRaw || !periode) {
+    alert("⚠️ PERHATIAN:\nSemua input (Jabatan, PAK Terakhir, dan Periode) wajib diisi sebelum menghitung!");
+    return;
+  }
+
+  const pakAwal = parseFloat(pakRaw);
   const [startY, startM0] = periode.split('-').map(Number);
-  const startM = startM0 - 1; // Konversi ke 0-11
+  const startM = startM0 - 1;
   
   const skpSelects = document.querySelectorAll('.skp-val');
   let currentPAK = pakAwal;
@@ -202,7 +235,7 @@ function prosesHitung() {
     }
   });
 
-  // Tampilkan Tabel
+  // Render Tabel
   let resHTML = `<table><tr><th>Bulan</th>`;
   Object.keys(riwayat).forEach(y => resHTML += `<th>${y}</th>`);
   resHTML += `</tr>`;
@@ -216,11 +249,11 @@ function prosesHitung() {
     resHTML += `</tr>`;
   }
 
-  resHTML += `<tr class="total-row"><td>TOTAL AKHIR</td>`;
+  resHTML += `<tr class="total-row"><td>TOTAL</td>`;
   Object.keys(riwayat).forEach(y => {
     const thn = riwayat[y].filter(x => x !== null);
     const total = thn.length > 0 ? thn[thn.length-1] : 0;
-    resHTML += `<td><span class="status-pill">${total.toFixed(3)}</span></td>`;
+    resHTML += `<td><span class="badge">${total.toFixed(3)}</span></td>`;
   });
   resHTML += `</tr></table>`;
 
@@ -228,7 +261,4 @@ function prosesHitung() {
 }
 </script>
 </body>
-
 </html>
-
-
